@@ -1,5 +1,9 @@
 # dotnetfx35installer
 
+Just download [`dotnetfx35installer.exe`](https://github.com/Coalpha/dotnetfx35installer/releases/download/1.0.0/dotnetfx35installer.exe) and run it. That's it.
+
+**You don't need the installation media. It's packaged in the executable!**
+
 Fixes Errors
 - `0x80070422`
 - `0x800F0950`
@@ -9,12 +13,6 @@ Probably Fixes
 - `0x800F0906`
 - `0x800F081F`
 - `0x800F0907`
-
-## Instructions
-
-Just download `dotnetfx35installer.exe` and run it. That's it.
-
-**You don't need the installation media. It's packaged in the executable!**
 
 ## Rant
 
