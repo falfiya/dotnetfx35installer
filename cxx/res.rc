@@ -1,0 +1,4 @@
+#include "res.h"
+
+G11N RCDATA G11N_PATH
+L10N RCDATA L10N_PATH
