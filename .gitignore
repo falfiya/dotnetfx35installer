@@ -1,0 +1,7 @@
+/.vscode/
+/bin/
+/cs/bin/
+/cs/obj/
+/cs/*.exe
+/cxx/*.res
+/cxx/*.exe

@@ -1,48 +1,58 @@
-using System;
 using System.IO;
 using System.Reflection;
 using System.Diagnostics;
-
-class Program {
+using static System.Console;
+class _ {
    static string[] files = {
       "microsoft-windows-netfx3-ondemand-package~31bf3856ad364e35~amd64~~.cab",
       "Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~en-US~.cab"
    };
 
    static void Main(string[] _) {
-      Console.Title = "dotnetfx35installer";
-      string outdir = Path.GetTempPath() + @"dotnetfx35installer\";
-      Console.WriteLine("Writing temporary installation files to " + outdir);
-      Console.Write("Does this look correct? Press 'y' continue: ");
-      var confirm = Console.ReadKey().KeyChar;
-      Console.Clear();
-      if (confirm != 'y') {
+      Title = "dotnetfx35installer.clr";
+
+      var outdir = Path.GetTempPath() + @"dotnetfx35installer\";
+      Write(
+         $"Writing temporary files to {outdir}\n"
+         + "\nDoes this look correct? Press 'y' continue: "
+      );
+      if (ReadKey().KeyChar != 'y') {
          return;
       }
+      Clear();
+
+      Title = "Installing...";
+
       if (Directory.Exists(outdir)) {
          Directory.Delete(outdir, true);
       }
-
       Directory.CreateDirectory(outdir);
+
       var assembly = Assembly.GetExecutingAssembly();
-      foreach (var filename in files) {
-         var stream = assembly.GetManifestResourceStream($"dotnetfx35installer.{filename}");
-         var output = File.Open(outdir + filename, FileMode.CreateNew);
-         stream.CopyTo(output);
-         stream.Dispose();
-         output.Dispose();
+      WriteLine("\nGetting resources:");
+      var names = assembly.GetManifestResourceNames();
+      for (var i = 0; i < names.Length; ++i) {
+         var name = names[i];
+         WriteLine($"{i}: {name}");
+         var res = assembly.GetManifestResourceStream(name);
+         var file = File.Open(outdir + name, FileMode.CreateNew);
+         res.CopyTo(file);
+         res.Dispose();
+         file.Dispose();
+         WriteLine($"{i}: Done");
       }
 
       var dism = @"C:\Windows\System32\dism.exe";
       var args = $"/Online /Enable-Feature /FeatureName:NetFX3 /All /LimitAccess /Source:{outdir}";
-      Console.WriteLine("Running DISM:");
-      Console.WriteLine($"{dism} {args}");
+      WriteLine($"{dism} {args}");
+      WriteLine("Please be patient!");
       Process.Start(dism, args).WaitForExit();
-      Console.WriteLine("\nFinished... probably...?");
-      Console.Title = "yay?";
-      Console.WriteLine($"Removing {outdir}");
+
+      Write($"Finished install\nCleaning Up...\n");
       Directory.Delete(outdir, true);
-      Console.WriteLine("Press any key to exit...");
-      Console.ReadKey();
+
+      Title = "Press any key to exit...";
+      WriteLine("Press any key to exit...");
+      ReadKey();
    }
 }

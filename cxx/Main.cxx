@@ -53,10 +53,9 @@ class EmbeddedFile {
 };
 
 int main() {
-   const auto temp = fs::temp_directory_path();
-   const auto outdir = temp / "dotnetfx35installer";
+   const auto outdir = fs::temp_directory_path() / "dotnetfx35installer";
 
-   cout << "Writing temporary files to " << temp << endl;
+   cout << "Writing temporary files to " << outdir << endl;
    cout << "Does this look correct? Press 'y' to continue: ";
    if (getchar() != 'y') {
       return 0;
@@ -85,6 +84,7 @@ int main() {
       source.c_str(),
       nullptr,
    };
+   cout << "Please be patient...\n";
    auto e = _spawnv(_P_WAIT, dism, args);
    if(e) {
       cerr << "Couldn't spawn dsim.exe\n";
@@ -94,6 +94,6 @@ int main() {
       cout << "Removed " << outdir << endl;
    }
    cout << "Press any key to exit...\n";
-   getchar();
-   getchar();
+   getchar(); // I'm not really sure about why I need two of these
+   getchar(); // It works, though
 }
